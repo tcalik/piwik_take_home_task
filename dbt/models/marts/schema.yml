@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: project_staffing
+    description: >
+      Mart model providing an overview of project lead and workforce allocation (team size, amount of working hours)
+    columns:
+      - name: project_code
+        description: "Primary key. Unique project code."
+        tests:
+          - unique
+          - not_null
+
+      - name: project_name
+        description: "Name of the project"
+        tests:
+          - not_null
+
+      - name: project_lead_id
+        description: >
+          Foreign key to stg_employees. The active employee designated as the project lead.
+          Null if no active lead is assigned to the project.
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+
+      - name: team_count
+        description: >
+          Count of distinct actively employed employees assigned to the project.
+          Defaults to 0 for projects with no active assignments.
+        tests:
+          - not_null
+
+      - name: total_weekly_hours
+        description: >
+          Sum of weekly hours across all active employee assignments on the project.
+          Defaults to 0 for projects with no active assignments.
+        tests:
+          - not_null
