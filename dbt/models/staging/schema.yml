@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_employees
-    description: Staging table for employee data
+    description: "Staging table for employee data"
     columns:
       - name: employee_id
         description: "Primary key of the employee's record"
@@ -42,3 +42,50 @@ models:
               arguments:
                 to: ref('stg_employees')
                 field: employee_id
+
+  - name: stg_project_assignments
+    description: "Staging table for employee project assignments"
+    columns:
+      - name: assignment_id
+        description: "Primary key of each assignment"
+        tests:
+          - unique
+          - not_null
+
+      - name: employee_id
+        description: "Foreign key to stg_employees. The employee assigned to the project."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_employees')
+              field: employee_id
+
+      - name: project_code
+        description: "Identifier code of a project"
+        tests:
+          - not_null
+
+      - name: project_name
+        description: "Name of the project."
+        tests:
+          - not_null
+
+      - name: assignment_role
+        description: "The role of the employee on this project."
+
+      - name: start_date
+        description: "Date the assignment began"
+        tests:
+          - not_null
+
+      - name: weekly_hours
+        description: "Number of hours per week the employee is allocated to this project."
+        tests:
+          - not_null
+
+      - name: is_billable
+        description: "Boolean flag indicating whether the assignment hours are billable."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
