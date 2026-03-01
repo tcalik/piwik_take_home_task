@@ -2,7 +2,7 @@
 Solution by Tomasz Calik
 
 ## Requirements
-The only requirement to run this project is `Docker`
+The only requirement to run this project is `Docker`, but running the project is the simplest with `make` also available.
 
 ## Running the project
 The quickest way to start this project is running
@@ -28,6 +28,20 @@ make dbt
 # to run dbt build - runs models and tests
 ```
 
+### Runnning without make
+``` bash
+docker compose build
+# to build the image
+docker compose up -d db
+# to start the db container
+docker compose run --rm runner uv run scripts/load_data.py
+# to upload the data into the psql db
+docker compose run --rm runner uv run dbt build --project-dir dbt --profiles-dir .
+# to run dbt build - runs models and tests
+docker compose down -v
+# to tear down the project
+```
+
 ### Accessing the db manually
 You can access the db manually by attaching a terminal to the container:
 ``` bash
@@ -44,8 +58,8 @@ The following decisions were made in order to solve edge cases and conflicts:
   1. Project leads: in `int_project_leads` a single lead is selected based on the employee with most hours in a lead role. This is done to achieve one lead per role and a single output row in the final mart. The main drawback of this approach is loss of detail at the project level(no visibility of the second lead in `PROJ-2024-004`) Alternatives considered: 
   - array of employee_id - some BI tools don't handle arrays well
   - concatenated string - complete loss of filtering functionality on employee_id
-  2. `int_project_leads` still outputs an inactive employee in the lead role of a project. Thanks to this approach we can also test if all project leads are active. In this case, the test `asser_active_leads` returns a `warn`
-  3. The `Billable? / is_billable` flag is ignored for all functional purposes. This has been decided since there was no clear correlation between employee status, weekly hours and the is_billable flag
+  2. `int_project_leads` still outputs an inactive employee in the lead role of a project. Thanks to this approach we can also test if all project leads are active. In this case, the test `asser_active_leads` returns a `warn`.
+  3. The `Billable? / is_billable` flag is ignored for all functional purposes. This has been decided since there was no clear correlation between employee status, weekly hours and the is_billable flag.
   ```sql
 select 
     e.employee_id
@@ -59,6 +73,7 @@ group by 1, 2
 order by 1;
   ```
   4. Denormalized values: Some values that could have been denormalized have not been - notably `project_code`/`project_name`. This is to both avoid increasing the complexity of this project and lack of a reasonable assumption for deduplication. However, it doesn't seem to be a problem in this dataset.
+  5. Client secrets are committed to this repository for ease of use. Since this is an isolated project with no security concerns, the `.env` and `profiles.yml` are part of the repository.
 
 ## Result 
 Column names `team_count` and `total_weekly_hours` abbreviated to fit table format
