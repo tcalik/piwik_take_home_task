@@ -35,7 +35,7 @@ select
     prj.project_code
 ,   prj.project_name
 ,   pl.project_lead_id
-,   coalesce(count(aa.employee_id), 0) as team_count
+,   count(aa.employee_id) as team_count
 ,   coalesce(sum(aa.weekly_hours), 0) as total_weekly_hours
 from projects prj
 left join active_assignments aa
