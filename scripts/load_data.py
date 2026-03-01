@@ -21,8 +21,11 @@ with adbc.connect(DATABASE_URL) as conn:
         cur.execute("CREATE SCHEMA IF NOT EXISTS source")
     conn.commit()
     for i, file in enumerate(files, start=1):
-        df = pd.read_excel(file['file_path'], header=file['header_row'])
-        df.columns = [clean_column_name(c) for c in df.columns]
-        print(f"Uploading {file['table_name']}")
-        df.to_sql(file['table_name'], conn, if_exists="replace", index=False, schema="source")
-        print(f"{file['table_name']} done")
+        try:
+            df = pd.read_excel(file['file_path'], header=file['header_row'])
+            df.columns = [clean_column_name(c) for c in df.columns]
+            print(f"Uploading {file['table_name']}")
+            df.to_sql(file['table_name'], conn, if_exists="replace", index=False, schema="source")
+            print(f"{file['table_name']} done")
+        except Exception as e:
+            print(f"Failed to upload {file['table_name']}: {e}")
