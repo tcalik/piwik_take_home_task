@@ -1,0 +1,3 @@
+data_tests:
+  - name: assert_terminated_employees
+    description: "Assert that no employees with a termination date have an active status"
