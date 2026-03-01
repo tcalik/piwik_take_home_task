@@ -1,0 +1,17 @@
+name: "piwik_dbt"
+version: "1.0.0"
+
+profile: "piwik_dbt"
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+clean-targets: # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+models:
+  piwik_dbt:
+    staging:
+      +materialized: table
+      +schema: staging
