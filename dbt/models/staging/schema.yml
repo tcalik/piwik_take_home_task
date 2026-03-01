@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: stg_employees
+    description: "Staging table for employee data"
+    columns:
+      - name: employee_id
+        description: "Primary key of the employee's record"
+        tests:
+          - not_null
+          - unique
+      - name: first_name
+        description: "Employee's first name"
+        tests:
+          - not_null
+      - name: last_name
+        description: "Employee's last name"
+        tests:
+          - not_null
+      - name: email_address
+        description: "Email address of the employee"
+      - name: department
+        description: "Department the employee belongs to"
+      - name: job_title
+        description: "Job title of the employee"
+      - name: date_of_hire
+        description: "Date on which the employee was hired"
+        tests:
+          - not_null
+      - name: termination_date
+        description: "Date on which the employee was terminated. Null if the employee hasn't been terminated"
+      - name: employment_status
+        description: "Current status name of the employee"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["Active", "Inactive"]
+      - name: reports_to
+        description: "Foreign key to the employee's manager"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+
+  - name: stg_project_assignments
+    description: "Staging table for employee project assignments"
+    columns:
+      - name: assignment_id
+        description: "Primary key of each assignment"
+        tests:
+          - unique
+          - not_null
+
+      - name: employee_id
+        description: "Foreign key to stg_employees. The employee assigned to the project."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+
+      - name: project_code
+        description: "Identifier code of a project"
+        tests:
+          - not_null
+
+      - name: project_name
+        description: "Name of the project."
+        tests:
+          - not_null
+
+      - name: assignment_role
+        description: "The role of the employee on this project."
+
+      - name: start_date
+        description: "Date the assignment began"
+        tests:
+          - not_null
+
+      - name: weekly_hours
+        description: "Number of hours per week the employee is allocated to this project."
+        tests:
+          - not_null
+
+      - name: is_billable
+        description: "Boolean flag indicating whether the assignment hours are billable."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]

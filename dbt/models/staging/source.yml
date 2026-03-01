@@ -1,0 +1,7 @@
+version: 2
+sources:
+  - name: piwik_source
+    schema: source
+    tables:
+      - name: hr_employees_export
+      - name: project_assignments_report

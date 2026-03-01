@@ -1,0 +1,8 @@
+data_tests:
+  - name: assert_terminated_employees
+    description: "Assert that no employees with a termination date have an active status"
+
+  - name: assert_active_leads
+    description: "Assert that all project leads are active"
+    config:
+      severity: warn

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_project_leads
+    description: >
+      Intermediate model evaluating a single lead per project.
+      If more than one employee is assigned as lead for a project, the employee with the highest assignment of hours is output.
+    columns:
+      - name: project_lead_id
+        description: "Foreign key to stg_employees. The employee identified as the primary lead for this project."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+      - name: project_code
+        description: "Foreign key to stg_project_assignments. Unique - only one row per project in this model."
+        tests:
+          - not_null
+          - unique
+
+      - name: employment_status
+        description: "Employment status of the employee"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Active", "Inactive"]
