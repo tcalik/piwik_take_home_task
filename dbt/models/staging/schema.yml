@@ -5,6 +5,40 @@ models:
     description: Staging table for employee data
     columns:
       - name: employee_id
+        description: "Primary key of the employee's record"
         tests:
           - not_null
           - unique
+      - name: first_name
+        description: "Employee's first name"
+        tests:
+          - not_null
+      - name: last_name
+        description: "Employee's last name"
+        tests:
+          - not_null
+      - name: email_address
+        description: "Email address of the employee"
+      - name: department
+        description: "Department the employee belongs to"
+      - name: job_title
+        description: "Job title of the employee"
+      - name: date_of_hire
+        description: "Date on which the employee was hired"
+        tests:
+          - not_null
+      - name: termination_date
+        description: "Date on which the employee was terminated. Null if the employee hasn't been terminated"
+      - name: employment_status
+        description: "Current status name of the employee"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["Active", "Inactive"]
+      - name: reports_to
+        description: "Foreign key to the employee's manager"
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
