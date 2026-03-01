@@ -1,4 +1,4 @@
-project:
+piwik_dbt:
   target: dev
   outputs:
     dev:
@@ -8,5 +8,5 @@ project:
       user: "{{ env_var('POSTGRES_USER') }}"
       password: "{{ env_var('POSTGRES_PASSWORD') }}"
       dbname: "{{ env_var('POSTGRES_DB') }}"
-      schema: public
+      schema: dev
       threads: 4
