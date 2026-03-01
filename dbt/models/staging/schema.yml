@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_employees
+    description: Staging table for employee data
+    columns:
+      - name: employee_id
+        tests:
+          - not_null
+          - unique
