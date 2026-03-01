@@ -57,8 +57,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_employees')
-              field: employee_id
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
 
       - name: project_code
         description: "Identifier code of a project"
@@ -88,4 +89,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [true, false]
+              arguments:
+                values: [true, false]
